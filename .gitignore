@@ -1,0 +1,8 @@
+
+.cache/
+.idea/
+__pycache__/
+
+.env
+.python-version
+*.json
