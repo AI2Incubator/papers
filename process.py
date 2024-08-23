@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
+from emergentmind import get_stats
 from llm import get_author_affiliations, post_process, get_tldr
 from cache import hf_cache_manager, hfp_cache_manager
 
@@ -35,14 +36,17 @@ def fetch_huggingface_papers(url="https://huggingface.co/papers", paper_date='20
 
         abstract = extract_abstract(paper_content)
         tldr = get_tldr(arxiv_paper_id, title, abstract)
+        social_media_stats = get_stats(arxiv_paper_id)
 
         papers.append(dict(
             notes="",
+            pick="",
             title=title,
             tldr=tldr,
             affiliations=post_process(get_author_affiliations(pdf_link)),
             upvote=extract_upvote_count(paper_content),
             paperOfTheDay=paper_date if paper_of_the_day else None,
+            **social_media_stats,
             abstract=abstract,
             date=paper_date,
             arXiv=extract_href_with_text(paper_content, 'View arXiv page'),

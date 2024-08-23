@@ -1,13 +1,13 @@
-# requests
-# beautifulsoup4
-# google-auth
-# google-auth-oauthlib
-# google-auth-httplib2
-# google-api-python-client
-# openai
-# pandas
-# PyPDF2
-# python-dotenv
+requests
+beautifulsoup4
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+google-api-python-client
+openai
+pandas
+PyPDF2
+python-dotenv
 
 
 

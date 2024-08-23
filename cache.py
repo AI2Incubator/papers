@@ -10,12 +10,12 @@ import requests
 def cache_dir():
     return Path('./.cache')
 
-def text_compress(str):
-    data = gzip.compress(str.encode('utf-8'))
+def text_compress(inp):
+    data = gzip.compress(inp.encode('utf-8'))
     return base64.b64encode(data).decode('ascii')
 
-def text_decompress(str):
-    data = base64.b64decode(str.encode('ascii'))
+def text_decompress(inp):
+    data = base64.b64decode(inp.encode('ascii'))
     return gzip.decompress(data).decode('utf-8')
 
 
@@ -54,8 +54,9 @@ def cache_request_get(url, cache_filename):
 
 
 class CacheManager:
-    def __init__(self, cache_file):
+    def __init__(self, cache_file, loads):
         self.cache_file = cache_file
+        self.loads = loads
         self.cache = self.load_cache()
 
     def load_cache(self):
@@ -64,7 +65,8 @@ class CacheManager:
             with self.cache_file.open("r") as f:
                 for line in f:
                     entry = json.loads(line)
-                    cache[entry["key"]] = text_decompress(entry["response"])
+                    response = text_decompress(entry["response"])
+                    cache[entry["key"]] = json.loads(response) if self.loads else response
         return cache
 
     def get_cached_response(self, cache_key):
@@ -73,21 +75,22 @@ class CacheManager:
     def cache_response(self, cache_key, response):
         self.cache[cache_key] = response
         with self.cache_file.open("a") as f:
-            entry = {"key": cache_key, "response": text_compress(response)}
+            resp = json.dumps(response) if self.loads else response
+            entry = {"key": cache_key, "response": text_compress(resp)}
             f.write(json.dumps(entry) + "\n")
 
 
 HF_CACHE_FILE = Path("./.cache/hf_cache.jsonl")
-hf_cache_manager = CacheManager(HF_CACHE_FILE)
+hf_cache_manager = CacheManager(HF_CACHE_FILE, False)
 
 HFP_CACHE_FILE = Path("./.cache/hfp_cache.jsonl")
-hfp_cache_manager = CacheManager(HFP_CACHE_FILE)
+hfp_cache_manager = CacheManager(HFP_CACHE_FILE, False)
 
 TLDR_CACHE_FILE = Path("./.cache/affiliation_cache.jsonl")
-affiliation_cache_manager = CacheManager(TLDR_CACHE_FILE)
+affiliation_cache_manager = CacheManager(TLDR_CACHE_FILE, False)
 
 TLDR_CACHE_FILE = Path("./.cache/tldr_cache.jsonl")
-tldr_cache_manager = CacheManager(TLDR_CACHE_FILE)
+tldr_cache_manager = CacheManager(TLDR_CACHE_FILE, False)
 
 def initialize_cache_and_gitignore():
     cache_dir().mkdir(exist_ok=True)
