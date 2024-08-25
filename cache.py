@@ -2,7 +2,6 @@ import base64
 import functools
 import gzip
 import json
-import time
 from pathlib import Path
 
 import requests
@@ -92,7 +91,13 @@ affiliation_cache_manager = CacheManager(TLDR_CACHE_FILE, False)
 TLDR_CACHE_FILE = Path("./.cache/tldr_cache.jsonl")
 tldr_cache_manager = CacheManager(TLDR_CACHE_FILE, False)
 
-def initialize_cache_and_gitignore():
+OVERVIEW_CACHE_FILE = Path("./.cache/overview_cache.jsonl")
+overview_cache_manager = CacheManager(TLDR_CACHE_FILE, False)
+
+PAPER_REVIEW_CACHE_FILE = Path("./.cache/paper_review_cache.jsonl")
+paper_review_cache_manager = CacheManager(PAPER_REVIEW_CACHE_FILE, False)
+
+def initialize():
     cache_dir().mkdir(exist_ok=True)
 
     gitignore_path = Path('./.gitignore')
@@ -107,4 +112,6 @@ def initialize_cache_and_gitignore():
     if '.cache/' not in content:
         with gitignore_path.open('a') as gitignore:
             gitignore.write('\n.cache/\n')
+
+    Path('.data').mkdir(exist_ok=True)
 

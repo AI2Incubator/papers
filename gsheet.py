@@ -42,29 +42,13 @@ class GSheet:
 
         self.papers = papers
         self.spreadsheet_name = spreadsheet_name
-        self.creds = self.authenticate()
+        self.creds = authenticate()
         self.service = build('sheets', 'v4', credentials=self.creds)
         self.spreadsheet_id = None
         self.column_names = list(papers[0].keys())
         self.paper_values = [list(paper.values()) for paper in papers]
         self.titles = [paper['title'] for paper in papers]
         self.pdf_urls = [paper['arXivPdf'] for paper in papers]
-
-    @staticmethod
-    def authenticate():
-        creds = None
-        if os.path.exists(TOKEN_FILE):
-            creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
-        if not creds or not creds.valid:
-            if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
-            else:
-                flow = InstalledAppFlow.from_client_secrets_file(
-                    CREDENTIALS_FILE, SCOPES)
-                creds = flow.run_local_server(port=0)
-            with open(TOKEN_FILE, 'w') as token:
-                token.write(creds.to_json())
-        return creds
 
     def create_spreadsheet(self, sheet_title="Sheet1"):
         spreadsheet = self.service.spreadsheets().create(body={
@@ -83,9 +67,10 @@ class GSheet:
 
         return spreadsheet_id
 
-    def insert_clickable_urls(self, titles, urls, sheet_id=0, column_index=1):
+    def insert_clickable_urls(self, titles, urls, sheet_id=0):
         """Assume: Sheet1 is the only sheet, and inserting into the second column (index = 1)"""
         requests = []
+        column_index = self.column_names.index('title')
         for i, (title, url) in enumerate(zip(titles, urls)):
             requests.append({
                 'updateCells': {
@@ -231,5 +216,40 @@ class GSheet:
                     f"Error: File with ID {self.spreadsheet_id} not found. Please check the ID and make sure the service account has access to the file.")
             else:
                 print(f"An error occurred: {error}")
+
+
+class GSheetReader:
+    def __init__(self, spreadsheet_id):
+        self.spreadsheet_id = spreadsheet_id
+        self.creds = authenticate()
+        self.service = build('sheets', 'v4', credentials=self.creds)
+
+    def read_sheet(self, sheet_name='Sheet1'):
+        result = self.service.spreadsheets().values().get(
+            spreadsheetId=self.spreadsheet_id,
+            range=sheet_name
+        ).execute()
+        data = result.get('values', [])
+
+        if not data or len(data) < 2:
+            return []
+
+        headers = data[0]
+        return [dict(zip(headers, row)) for row in data[1:]]
+
+def authenticate():
+    creds = None
+    if os.path.exists(TOKEN_FILE):
+        creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                CREDENTIALS_FILE, SCOPES)
+            creds = flow.run_local_server(port=0)
+        with open(TOKEN_FILE, 'w') as token:
+            token.write(creds.to_json())
+    return creds
 
 # %%

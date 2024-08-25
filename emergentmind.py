@@ -24,7 +24,7 @@ def paper_url(arxiv_id):
 
 
 EMERGENT_BASE_URL = 'https://www.emergentmind.com/papers/'
-EMERGENT_CACHE = CacheManager(Path('.cache/emergent.json'), loads)
+EMERGENT_CACHE = CacheManager(Path('.cache/emergent.jsonl'), loads)
 
 def get_stats(arxiv_id):
     stats = EMERGENT_CACHE.get_cached_response(arxiv_id)
@@ -32,7 +32,7 @@ def get_stats(arxiv_id):
         return stats
 
     content = (requests.get(paper_url(arxiv_id))).text.replace('&quot;', '"')
-    stat_names = ["twitter_likes_count", "reddit_points_count", "hacker_news_points_count", "github_repos_count", "github_stars_count"]
+    stat_names = ["twitter_likes_count", "reddit_points_count", "hacker_news_points_count", "youtube_paper_mentions_count", "github_repos_count", "github_stars_count", "github_pages_count"]
     stats = { python_to_java_name(x): extract_value(content, x) for x in stat_names}
     EMERGENT_CACHE.cache_response(arxiv_id, stats)
     return stats
@@ -41,10 +41,8 @@ def get_stats(arxiv_id):
 
 # %%
 
-# stats = get_stats('2408.06292')
+stats = get_stats('2408.06292')
 
-d = dict(a=1, b=2)
-d2 = dict(c=3, d=4, **d, e=5)
 
 
 
