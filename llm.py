@@ -138,40 +138,48 @@ def format_review(paper, review, picked, spreadsheet_id):
     content += f"_{paper['affiliations']}_\n\n"
 
     def make_logo_link(logo, link, tooltip):
-        return f"""<a href="{link}" target="_blank" title={tooltip}>{logo}</a>"""
+        return f"""<a href="{link}" target="_blank" title="{tooltip}"><img src="{logo}"></a>"""
 
     def semantic_scholar_link(arxiv_id):
         return f"""<a href="https://api.semanticscholar.org/arXiv:{arxiv_id}" target="_blank" title="Semantic Scholar page"><img src="https://cdn.semanticscholar.org/838efdaeab2a7376/img/favicon-32x32.png" width="24" height="24"></a>"""
 
+    def hf_link(paper):
+        return f"""<a href="{paper['url']}" target="_blank" title="Hugging Face Papers"><span style="font-size: 24px;">&#x1F917;</span></a>"""
+
     def horizontal_space():
-        return """<span style="margin-left: 24px;"></span>"""
+        return """&nbsp; &nbsp;"""
 
     def github_stats(paper):
         return paper['githubStarsCount'] if int(paper['githubReposCount']) > 0 else paper['githubPagesCount']
 
+    def make_social_media_link(link, tooltip, count):
+        # return f"""<span>{logo} {count}</span>"""
+        return f"""<img src="{link}" alt="{tooltip}"><span>{count}</span>"""
+
     # links
     content += (
-        f"<span style='display: flex; align-items: center;'>"
-        f" {make_logo_link(ARXIV_LOGO, paper['arXiv'], 'arXiv')}"
+        f"<div style='display: flex; align-items: center; justify-content: center;'>"
+        f"{make_logo_link(ARXIV_LOGO, paper['arXiv'], 'arXiv')}"
         f"{horizontal_space()}"
-        f" {semantic_scholar_link(arxiv_id)}"
+        f"{semantic_scholar_link(arxiv_id)}"
         f"{horizontal_space()}"
-        f" {make_logo_link(HF_LOGO, paper['url'], 'Hugging Face Papers')}"
+        # f" {make_logo_link(HF_LOGO, paper['url'], 'Hugging Face Papers')}"
+        f"{hf_link(paper)}"
         f"{horizontal_space()}"
-        f" {make_logo_link(EMERGENTMIND_LOGO, f'https://www.emergentmind.com/papers/{arxiv_id}', 'Emergent Mind page')}"
+        f"{make_logo_link(EMERGENTMIND_LOGO, f'https://www.emergentmind.com/papers/{arxiv_id}', 'Emergent Mind page')}"
         f"{horizontal_space()}"
         f"{horizontal_space()}"
         # social media: X, HackerNews, Reddit, YouTube, GitHub
-        f"{X_LOGO} <span>{paper['twitterLikesCount']}</span>"
+        f"{make_social_media_link(X_LOGO, 'X', paper['twitterLikesCount'])}"
         f"{horizontal_space()}"
-        f"{HACKERNEWS_LOGO} {paper['hackerNewsPointsCount']}"
+        f"{make_social_media_link(HACKERNEWS_LOGO, 'HackerNews', paper['hackerNewsPointsCount'])}"
         f"{horizontal_space()}"
-        f"{REDDIT_LOGO} {paper['redditPointsCount']}"
+        f"{make_social_media_link(REDDIT_LOGO, 'Reddit', paper['redditPointsCount'])}"
         f"{horizontal_space()}"
-        f"{YOUTUBE_LOGO} {paper['youtubePaperMentionsCount']}"
+        f"{make_social_media_link(YOUTUBE_LOGO, 'YouTube', paper['youtubePaperMentionsCount'])}"
         f"{horizontal_space()}"
-        f"{GITHUB_LOGO} {github_stats(paper)}"
-        f"</span>"
+        f"{make_social_media_link(GITHUB_LOGO, 'GitHub', github_stats(paper))}"
+        f"</div>"
         f"\n\n")
 
     def notes_cell_url(spreadsheet_id, row):

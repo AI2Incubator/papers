@@ -1,4 +1,32 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M8.25 17.4167C4.30833 18.7 4.30833 15.125 2.75 14.6667M13.75 19.25V16.0417C13.75 15.125 13.8417 14.7583 13.2917 14.2083C15.8583 13.9333 18.3333 12.925 18.3333 8.70835C18.3322 7.6129 17.9048 6.56088 17.1417 5.77502C17.4996 4.82349 17.4666 3.76901 17.05 2.84168C17.05 2.84168 16.0417 2.56668 13.8417 4.03335C11.9783 3.54805 10.0217 3.54805 8.15833 4.03335C5.95833 2.56668 4.95 2.84168 4.95 2.84168C4.53336 3.76901 4.50041 4.82349 4.85833 5.77502C4.09517 6.56088 3.66778 7.6129 3.66667 8.70835C3.66667 12.925 6.14167 13.9333 8.70833 14.2083C8.15833 14.7583 8.15833 15.3083 8.25 16.0417V19.25"
-          stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
+   fill="none"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="GitHub.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
+  <path
+     d="M8.25 17.4167C4.30833 18.7 4.30833 15.125 2.75 14.6667M13.75 19.25V16.0417C13.75 15.125 13.8417 14.7583 13.2917 14.2083C15.8583 13.9333 18.3333 12.925 18.3333 8.70835C18.3322 7.6129 17.9048 6.56088 17.1417 5.77502C17.4996 4.82349 17.4666 3.76901 17.05 2.84168C17.05 2.84168 16.0417 2.56668 13.8417 4.03335C11.9783 3.54805 10.0217 3.54805 8.15833 4.03335C5.95833 2.56668 4.95 2.84168 4.95 2.84168C4.53336 3.76901 4.50041 4.82349 4.85833 5.77502C4.09517 6.56088 3.66778 7.6129 3.66667 8.70835C3.66667 12.925 6.14167 13.9333 8.70833 14.2083C8.15833 14.7583 8.15833 15.3083 8.25 16.0417V19.25"
+     stroke="currentColor"
+     stroke-width="1.25"
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     id="path1" />
 </svg>
