@@ -46,26 +46,30 @@ def retrieve_papers():
     append_tsv(SPREADSHEET_FILE, [last_monday, spreadsheet_id])
 
 
-def generate_review_aux(picked_paper, reviewed_papers, last_monday, spreadsheet_id):
-    print(f"Picked paper: {picked_paper['title']}")
-    pick_paper_short_title = input("Enter the short title for the picked paper: ")
+def generate_review_aux(picked_papers, reviewed_papers, last_monday, spreadsheet_id):
+    # pick the first paper from the picked_papers list
+    print(f"Picked paper: {picked_papers[0]['title']}")
+    picked_paper_short_title = input("Enter the short title for the picked paper: ")
 
     # convert last_monday which has format 'YYYY-MM-DD' to 'M/D/YYYY'
     date_obj = datetime.strptime(last_monday, '%Y-%m-%d')
     new_date = date_obj.strftime('%-m/%-d/%Y')
 
-    title = f"Weekly paper roundup: {pick_paper_short_title} ({new_date})"
+    title = f"Weekly paper roundup: {picked_paper_short_title} ({new_date})"
     print(title)
 
     over_view = get_overview(last_monday, reviewed_papers)
-    picked_paper_review = get_paper_review(picked_paper, spreadsheet_id, picked=True)
+    content = f"# {title}\n\n{over_view}\n\n"
 
-    content = f"# {title}\n\n{over_view}\n\n{picked_paper_review}\n\n"
+    for picked_paper in picked_papers:
+        picked_paper_review = get_paper_review(picked_paper, spreadsheet_id, picked=True)
+        content += f"{picked_paper_review}\n\n"
 
     content += "## Other papers\n\n"
 
+    picked_paper_arxivids = [paper['arXiv'] for paper in picked_papers]
     for paper in reviewed_papers:
-        if paper['arXiv'] == picked_paper['arXiv']:
+        if paper['arXiv'] in picked_paper_arxivids:
             continue
         content += get_paper_review(paper, spreadsheet_id)
 
@@ -97,18 +101,17 @@ def generate_review():
         paper['row_index'] = i + 2
 
     # find the paper where the pick column is non-empty
-    picked_paper = None
+    picked_papers = []
     for paper in papers:
         if paper['pick']:
-            picked_paper = paper
-            break
+            picked_papers.append(paper)
 
     # find papers where the notes column is non-empty and not equal to 'skip', case insensitive
     reviewed_papers = [paper for paper in papers if paper['notes'] and paper['notes'].strip().lower() != 'skip']
 
     # sort reviewed_papers by the upvote column in descending order
     reviewed_papers = sorted(reviewed_papers, key=lambda x: int(x['upvote']), reverse=True)
-    generate_review_aux(picked_paper, reviewed_papers, last_monday, spreadsheet_id)
+    generate_review_aux(picked_papers, reviewed_papers, last_monday, spreadsheet_id)
 
 
 def publish_review():

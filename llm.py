@@ -163,10 +163,12 @@ def format_review(paper, review, picked, spreadsheet_id):
         f"{horizontal_space()}"
         f"{semantic_scholar_link(arxiv_id)}"
         f"{horizontal_space()}"
+        f"{make_logo_link(EMERGENTMIND_LOGO, f'https://www.emergentmind.com/papers/{arxiv_id}', 'Emergent Mind page')}"
+        f"{horizontal_space()}"
         # f" {make_logo_link(HF_LOGO, paper['url'], 'Hugging Face Papers')}"
         f"{hf_link(paper)}"
         f"{horizontal_space()}"
-        f"{make_logo_link(EMERGENTMIND_LOGO, f'https://www.emergentmind.com/papers/{arxiv_id}', 'Emergent Mind page')}"
+        f"{paper['upvote']}"
         f"{horizontal_space()}"
         f"{horizontal_space()}"
         # social media: X, HackerNews, Reddit, YouTube, GitHub
@@ -186,7 +188,9 @@ def format_review(paper, review, picked, spreadsheet_id):
         return f"https://docs.google.com/spreadsheets/d/{spreadsheet_id}/edit?gid=0#gid=0&range=A{row}"
 
     content += (f"{review}"
-                f"""<a href="{notes_cell_url(spreadsheet_id, paper['row_index'])}" target="_blank"> Raw notes</a>"""
+                # f"""<a href="{notes_cell_url(spreadsheet_id, paper['row_index'])}" target="_blank"> Raw notes</a>"""
+                "\n\n"
+                f"<small>Raw notes: {paper['notes']}</small>"
                 f"\n\n---\n\n")
 
     return content
