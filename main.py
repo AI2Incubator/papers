@@ -76,7 +76,8 @@ def generate_review_aux(picked_papers, reviewed_papers, last_monday, spreadsheet
     content += ("\n\n"
                 "### Acknowledgements\n\n"
                 "Papers are retrieved from [Hugging Face](https://huggingface.co/papers).\n\n"
-                "Social media metrics are from [Emergent Mind](https://www.emergentmind.com/).\n\n")
+                # "Social media metrics are from [Emergent Mind](https://www.emergentmind.com/).\n\n"
+                )
 
 
     with open(review_file(last_monday), 'w') as f:

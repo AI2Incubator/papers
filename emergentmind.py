@@ -41,7 +41,7 @@ def get_stats(arxiv_id):
 
 # %%
 
-stats = get_stats('2408.06292')
+# stats = get_stats('2408.06292')
 
 
 
