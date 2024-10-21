@@ -23,6 +23,7 @@ def fetch_huggingface_papers(url="https://huggingface.co/papers", paper_date='20
         paper_id = title_element['href']
         hf_paper_url = urljoin(url, paper_id)
         arxiv_paper_id = paper_id.split('/')[-1]
+        # print(arxiv_paper_id)
 
         # Get the last part of the relative_link for the cache filename
         # paper_content = cache_request_get(absolute_url, cache_filename)
@@ -86,10 +87,10 @@ def extract_upvote_count(html_content):
     soup = BeautifulSoup(html_content, 'html.parser')
     upvote_div = soup.find('div', class_='font-semibold text-orange-500')
 
-    if upvote_div:
+    try:
         return int(upvote_div.text)
-
-    raise ValueError("Upvote count not found")
+    except:
+        return 0
 
 #%%
 
